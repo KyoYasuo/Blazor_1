@@ -1,0 +1,67 @@
+﻿@page "/RichEditAPI"
+@using DevExpress.Office.Utils
+@inject NavigationManager NavigationManager
+
+<DemoPageSectionComponent Id="RichEdit-API">
+    <DxRichEdit @ref="richEdit" CssClass="w-100 ch-720" />
+
+    @code {
+        DxRichEdit richEdit;
+
+        protected override async Task OnAfterRenderAsync(bool firstRender) {
+            if (firstRender) {
+                try {
+                    await InitializeDocument();
+                }
+                catch (TaskCanceledException) { }
+            }
+            await base.OnAfterRenderAsync(firstRender);
+        }
+        async Task InitializeDocument() {
+            Document documentAPI = richEdit.DocumentAPI;
+            documentAPI.BeginUpdate();
+            Paragraph bodyParagraph = await documentAPI.Paragraphs.CreateAsync(0);
+            await bodyParagraph.ChangePropertiesAsync(properties => {
+                properties.FirstLineIndentType = FirstLineIndentType.Indented;
+                properties.FirstLineIndent = 500;
+            });
+            string bodyParagraphText = "Albert Einstein (14 March 1879 - 18 April 1955) was a German-born theoretical physicist, widely acknowledged to be one of the greatest physicists of all time. Einstein is known for developing the theory of relativity, but he also made important contributions to the development of the theory of quantum mechanics.";
+            TextSpan bodyParagraphTextSpan = await documentAPI.AddTextAsync(0, bodyParagraphText);
+            await bodyParagraphTextSpan.ChangePropertiesAsync(properties => {
+                properties.FontName = "Segoe UI";
+                properties.FontSize = 12;
+            });
+            TextSpan boldTextSpan = await documentAPI.GetTextSpanAsync(0, 15);
+            await boldTextSpan.ChangePropertiesAsync(properties => {
+                properties.FontBold = true;
+            });
+            TextSpan italicTextSpan = await documentAPI.GetTextSpanAsync(16, 31);
+            await italicTextSpan.ChangePropertiesAsync(properties => {
+                properties.FontItalic = true;
+            });
+            await documentAPI.Hyperlinks.CreateAsync(bodyParagraphText.IndexOf("quantum mechanics"), "quantum mechanics".Length, url: "https://en.wikipedia.org/wiki/Quantum_mechanics");
+            await documentAPI.Hyperlinks.CreateAsync(bodyParagraphText.IndexOf("theory of relativity"), "theory of relativity".Length, url: "https://en.wikipedia.org/wiki/Theory_of_relativity");
+            await documentAPI.Hyperlinks.CreateAsync(bodyParagraphText.IndexOf("theoretical physicist"), "theoretical physicist".Length, url: "https://en.wikipedia.org/wiki/Theoretical_physics");
+
+            Paragraph pictureParagraph = await documentAPI.Paragraphs.CreateAsync(0);
+            await pictureParagraph.ChangePropertiesAsync(properties => {
+                properties.Alignment = ParagraphAlignment.Center;
+            });
+            await documentAPI.InlineImages.CreateAsync(0, DocumentImageSource.LoadFromUrl(NavigationManager.BaseUri + "_content/BlazorDemo/images/documents/AlbertEinstein.jpg", UnitConverter.PixelsToTwips(220), UnitConverter.PixelsToTwips(289)));
+            Paragraph titleParagraph = await documentAPI.Paragraphs.CreateAsync(0);
+            await titleParagraph.ChangePropertiesAsync(properties => {
+                properties.SpacingAfter = 400;
+            });
+            TextSpan titleParagraphTextSpan = await documentAPI.AddTextAsync(0, "Albert Einstein");
+            await titleParagraphTextSpan.ChangePropertiesAsync(properties => {
+                properties.FontName = "Arial";
+                properties.FontSize = 24;
+                properties.FontBold = true;
+            });
+            Section section = await documentAPI.Sections.GetAsync(0);
+            SubDocument footer = await section.GetFooterAsync(createIfNotExist: true);
+            await footer.AddTextAsync(0, "Source Wikipedia.com");
+            documentAPI.EndUpdate();
+        }
+    }
+</DemoPageSectionComponent>

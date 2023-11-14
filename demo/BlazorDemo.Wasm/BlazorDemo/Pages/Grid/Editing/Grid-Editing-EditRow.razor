@@ -1,0 +1,64 @@
+﻿@page "/Grid/EditData/EditRow"
+@layout DataProviderAccessArea<INwindDataProvider>
+
+<DemoPageSectionComponent Id="Grid-Editing-EditRow" ShowSizeMode="true" ShowKeyboardNavigationSwitcher="true">
+    <ChildContentWithParameters Context="Params">
+        @inject NwindDataService NwindDataService
+
+        <DxGrid @ref="Grid"
+                Data="DataSource"
+                PageSize="12"
+                KeyFieldName="EmployeeId"
+                ValidationEnabled="false"
+                CustomizeEditModel="Grid_CustomizeEditModel"
+                EditModelSaving="Grid_EditModelSaving"
+                DataItemDeleting="Grid_DataItemDeleting"
+                EditMode="GridEditMode.EditRow"
+                EditorRenderMode="GridEditorRenderMode.Integrated"
+                SizeMode="Params.SizeMode" KeyboardNavigationEnabled="Params.KeyboardNavigationEnabled">
+            <Columns>
+                <DxGridCommandColumn Width="160px" />
+                <DxGridDataColumn FieldName="FirstName" MinWidth="80" />
+                <DxGridDataColumn FieldName="LastName" MinWidth="80" />
+                <DxGridDataColumn FieldName="Title" MinWidth="100" />
+                <DxGridDataColumn FieldName="TitleOfCourtesy" MinWidth="120" />
+                <DxGridDataColumn FieldName="BirthDate" Width="10%" MinWidth="80" />
+                <DxGridDataColumn FieldName="HireDate" Width="10%" MinWidth="80" />
+            </Columns>
+        </DxGrid>
+    </ChildContentWithParameters>
+
+    @code {
+        IEnumerable<EditableEmployee> DataSource { get; set; }
+        IGrid Grid { get; set; }
+
+        protected override async Task OnInitializedAsync() {
+            DataSource = await NwindDataService.GetEmployeesEditableAsync();
+        }
+        protected override async Task OnAfterRenderAsync(bool firstRender) {
+            if(firstRender)
+                await Grid.StartEditRowAsync(0);
+        }
+        void Grid_CustomizeEditModel(GridCustomizeEditModelEventArgs e) {
+            if(e.IsNew) {
+                var newEmployee = (EditableEmployee)e.EditModel;
+                newEmployee.FirstName = "John";
+                newEmployee.LastName = "Doe";
+            }
+        }
+        async Task Grid_EditModelSaving(GridEditModelSavingEventArgs e) {
+            if(e.IsNew)
+                await NwindDataService.InsertEmployeeAsync((EditableEmployee)e.EditModel);
+            else
+                await NwindDataService.UpdateEmployeeAsync((EditableEmployee)e.DataItem, (EditableEmployee)e.EditModel);
+            await UpdateDataAsync();
+        }
+        async Task Grid_DataItemDeleting(GridDataItemDeletingEventArgs e) {
+            await NwindDataService.RemoveEmployeeAsync((EditableEmployee)e.DataItem);
+            await UpdateDataAsync();
+        }
+        async Task UpdateDataAsync() {
+            DataSource = await NwindDataService.GetEmployeesEditableAsync();
+        }
+    }
+</DemoPageSectionComponent>

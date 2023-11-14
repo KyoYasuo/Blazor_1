@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <EnableDefaultItems>False</EnableDefaultItems>
+    <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
+    <GenerateRuntimeConfigDevFile>true</GenerateRuntimeConfigDevFile>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <IntermediateOutputPath>obj.WASM</IntermediateOutputPath>
+    <RollForward>Major</RollForward>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.0" />
+    <PackageReference Include="DevExtreme.AspNet.Data" Version="2.9.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="6.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Components" Version="6.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="6.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.0" />
+    <ProjectReference Include="..\BlazorDemo.Reporting.Core\BlazorDemo.Reporting.Core.csproj" />
+    <ProjectReference Include="..\BlazorDemo.Wasm.Client\BlazorDemo.Wasm.Client.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="DevExpress.Blazor.RichEdit" Version="23.1.6" />
+    <PackageReference Include="DevExpress.AspNetCore.Reporting" Version="23.1.6" />
+    <PackageReference Include="DevExpress.Reporting.Demos" Version="23.1.6" />
+    <PackageReference Include="DevExpress.Drawing.Skia" Version="23.1.6" />
+    
+    
+    
+    
+    
+    
+    
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Controllers\**\*.cs" />
+    <Compile Include="DataProviders\*.cs" />
+    <Compile Include="DataProviders\EntityFramework\EntityDataProvider.cs" />
+    <Compile Include="DataProviders\EntityFramework\HomesContext.cs" />
+    <Compile Include="DataProviders\EntityFramework\HomesDataProvider.cs" />
+    <Compile Include="DataProviders\EntityFramework\IssuesContext.cs" />
+    <Compile Include="DataProviders\EntityFramework\IssuesDataProvider.cs" />
+    <Compile Include="DataProviders\EntityFramework\NorthwindContext.cs" />
+    <Compile Include="DataProviders\EntityFramework\NwindDataProvider.cs" />
+    <Compile Include="DataProviders\EntityFramework\WorldcitiesContext.cs" />
+    <Compile Include="DataProviders\EntityFramework\WorldcitiesDataProvider.cs" />
+    <Compile Include="HostingStartupBase.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Services\DemoStaticResourceService.cs" />
+    <Compile Include="Services\DemoReportStorageWebExtension.cs" />
+    <Compile Include="Services\ReportingCustomConfigurationProvider.cs" />
+    <Compile Include="Startup.Wasm.AspNetCoreHosted.cs" />
+    <Compile Include="Startup.Reporting.cs" />
+    <Compile Include="Utils\*.cs" />
+    <Content Include="Pages\*.razor" />
+    <Content Include="Pages\*.cshtml" />
+    <Content Include="*.json" CopyToPublishDirectory="PreserveNewest" />
+  </ItemGroup>
+  <ItemGroup>
+    <DotnetPublishFiles Include="wwwroot/**;*.json">
+      <DestinationRelativePath>%(RelativeDir)%(Filename)%(Extension)</DestinationRelativePath>
+    </DotnetPublishFiles>
+  </ItemGroup>
+</Project>

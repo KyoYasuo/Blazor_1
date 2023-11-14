@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <EnableDefaultItems>False</EnableDefaultItems>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
+    <GenerateRuntimeConfigDevFile>true</GenerateRuntimeConfigDevFile>
+    <UserSecretsId>eb274127-1fcd-4ba5-9952-497c7df007d0</UserSecretsId>
+    <RollForward>Major</RollForward>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>$(DefineConstants)TRACE;SERVER_BLAZOR</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefineConstants>$(DefineConstants)TRACE;SERVER_BLAZOR</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='VisualTests|AnyCPU'">
+    <DefineConstants>$(DefineConstants)TRACE;SERVER_BLAZOR</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.0" />
+    <PackageReference Include="System.Resources.Extensions" Version="4.6.0" />
+    <PackageReference Include="DevExpress.Blazor.Reporting.JSBasedControls.BlazorServer" Version="23.1.6" />
+    <PackageReference Include="DevExpress.Blazor.Reporting.Viewer" Version="23.1.6" />
+    <PackageReference Include="DevExpress.Blazor.Server.WebAssembly" Version="23.1.6" />
+    <PackageReference Include="DevExpress.Reporting.Demos" Version="23.1.6" />
+    <PackageReference Include="DevExpress.Drawing.Skia" Version="23.1.6" />
+    
+    
+    
+    
+    
+    
+    
+    <ProjectReference Include="..\BlazorDemo.Reporting.Core\BlazorDemo.Reporting.Core.csproj" />
+    <ProjectReference Include="..\BlazorDemo\BlazorDemo.ServerSide.Core.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Controllers\NwindController*.cs" />
+    <Compile Include="Controllers\Upload*Controller.cs" />
+    <Compile Include="Controllers\ReportingControllers.cs" />
+    <Compile Include="DataProviders\**\*.cs" />
+    <Compile Include="HostingStartupBase.cs" />
+    <Compile Include="Startup.Reporting.cs" />
+    <Compile Include="Services\*.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Startup.ServerSide.cs" />
+    <Compile Include="Utils\*.cs" />
+    <Content Include="Pages\*.razor" />
+    <Content Include="Pages\*.cshtml" />
+    <Content Include="*.json" CopyToPublishDirectory="PreserveNewest" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="FileSystemData\**\*.*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <DotnetPublishFiles Include="wwwroot/**;*.json">
+      <DestinationRelativePath>%(RelativeDir)%(Filename)%(Extension)</DestinationRelativePath>
+    </DotnetPublishFiles>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,27 @@
+﻿<DemoPageSectionComponent Id="Editors-Calendar-DayCellCustomization" ShowSizeMode="true">
+    <ChildContentWithParameters Context="Params">
+        <DxCalendar T="DateTime" SizeMode="Params.SizeMode">
+            <DayCellTemplate>
+                <a class="@GetCssClassNames(context)">@context.Day.ToString()</a>
+            </DayCellTemplate>
+        </DxCalendar>
+    </ChildContentWithParameters>
+
+    @code {
+        CalendarData Data { get; set; } = new CalendarData();
+
+        string GetCssClassNames(DateTime date) {
+            if(Data.PersonalDays.Exists(d => DaysEqual(d, date)))
+                return "fw-bold text-success";
+            if(Data.Holidays.Exists(d => DaysEqual(d, date)))
+                return "text-danger";
+            if(Data.BirthDates.Exists(d => DaysEqual(d, date)))
+                return "fw-bold text-info";
+
+            return string.Empty;
+        }
+        bool DaysEqual(DateTime date1, DateTime date2) {
+            return (date1.Year == date2.Year && date1.DayOfYear == date2.DayOfYear);
+        }
+    }
+</DemoPageSectionComponent>
